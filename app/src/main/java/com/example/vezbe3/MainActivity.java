@@ -24,13 +24,18 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ArrayList<Kontakt> kontakti = new ArrayList<Kontakt>();
-        kontakti = popuniListuTestPodacima();
+        Intent dolazni = getIntent();
+        kontakti = popuniListuTestPodacima(dolazni);
         TextView searchField = (TextView) findViewById(R.id.twSearch);
         Button dodajKontakt = (Button) findViewById(R.id.buttonDodaj);
         Intent intent = new Intent(this, EditScreenActivity.class);
+        Kontakt novi = new Kontakt(dolazni.getStringExtra("ime"), dolazni.getStringExtra("skype"), dolazni.getStringExtra("telefon"), dolazni.getStringExtra("prezime"));
+       // kontakti.add(novi);
+        ArrayList<Kontakt> finalKontakti1 = kontakti;
         dodajKontakt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                intent.putExtra("podaci",kontaktiString(finalKontakti1));
                 startActivity(intent);
             }
         });
@@ -60,10 +65,14 @@ public class MainActivity extends AppCompatActivity {
         });
         prikaziKontakte(kontakti);
         };
-    private ArrayList<Kontakt> popuniListuTestPodacima() {
+    private ArrayList<Kontakt> popuniListuTestPodacima(Intent intent) {
         ArrayList<Kontakt> kontakti = new ArrayList<Kontakt>();
-        for(int i=0; i<20; i++) {
-            kontakti.add(new Kontakt("ime"+String.valueOf(i), "skype"+String.valueOf(i), "telefon"+String.valueOf(i), "prezime"+String.valueOf(i)));
+        String podaci = intent.getStringExtra("podaci");
+        if (podaci == null || podaci.isEmpty()) {
+            kontakti = popuniPocetnePodatke();
+        }
+        else {
+           kontakti = popuniStarePodatke(intent.getStringExtra("podaci"),intent);
         }
         return kontakti;
     }
@@ -82,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
             prezime.setText(kontakt.getPrezime());
             telefon.setText(kontakt.getTelefon());
             skype.setText(kontakt.getSkype());
-            oboj();
             Button obrisi = (Button) view.findViewById(R.id.btnObrisi);
             obrisi.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -94,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
             });
             ((LinearLayout) findViewById(R.id.scrollViewLayout)).addView(view);
         }
+        oboj();
     }
     private void oboj() {
         int broj = ((LinearLayout)findViewById(R.id.scrollViewLayout)).getChildCount();
@@ -110,5 +119,31 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return filtrirani;
+    }
+    private String kontaktiString(ArrayList<Kontakt> kontakti) {
+        String rezultat = "";
+        for (Kontakt kontakt : kontakti) {
+            rezultat+=kontakt.getIme()+"-"+kontakt.getPrezime()+"-"+kontakt.getTelefon()+"-"+kontakt.getSkype()+",";
+        }
+        return rezultat;
+    }
+    private ArrayList<Kontakt> popuniPocetnePodatke() {
+        ArrayList<Kontakt> kontakti= new ArrayList<Kontakt>();
+        for(int i=0; i<20; i++) {
+            kontakti.add(new Kontakt("ime"+String.valueOf(i), "skype"+String.valueOf(i), "telefon"+String.valueOf(i), "prezime"+String.valueOf(i)));
+        }
+        return kontakti;
+    }
+    private ArrayList<Kontakt> popuniStarePodatke(String vrednosti, Intent intent) {
+        ArrayList<Kontakt> kontakti= new ArrayList<Kontakt>();
+        String [] podaci = vrednosti.split(",");
+        for (int i =0; i<podaci.length;i++) {
+            String [] atributi = podaci[i].split("-");
+            kontakti.add(new Kontakt(atributi[0], atributi[3],atributi[2],atributi[1]));
+        }
+        if(!(intent.getStringExtra("ime").isEmpty())){
+            kontakti.add(new Kontakt(intent.getStringExtra("ime"),intent.getStringExtra("skype"),intent.getStringExtra("telefon"),intent.getStringExtra("prezime")));
+        }
+        return kontakti;
     }
 }
