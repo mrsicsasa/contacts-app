@@ -1,5 +1,6 @@
 package com.example.vezbe3;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -25,7 +26,16 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Kontakt> kontakti = new ArrayList<Kontakt>();
         kontakti = popuniListuTestPodacima();
         TextView searchField = (TextView) findViewById(R.id.twSearch);
+        Button dodajKontakt = (Button) findViewById(R.id.buttonDodaj);
+        Intent intent = new Intent(this, EditScreenActivity.class);
+        dodajKontakt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(intent);
+            }
+        });
         ArrayList<Kontakt> finalKontakti = kontakti;
+
         searchField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
