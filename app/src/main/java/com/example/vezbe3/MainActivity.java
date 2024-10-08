@@ -2,6 +2,8 @@ package com.example.vezbe3;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +24,30 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ArrayList<Kontakt> kontakti = new ArrayList<Kontakt>();
         kontakti = popuniListuTestPodacima();
+        TextView searchField = (TextView) findViewById(R.id.twSearch);
+        ArrayList<Kontakt> finalKontakti = kontakti;
+        searchField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String searchText = searchField.getText().toString();
+                if (!searchText.isEmpty()) {
+                    ArrayList<Kontakt> filtrirani = filtriraj(finalKontakti, searchText);
+                    prikaziKontakte(filtrirani);
+                } else {
+                    prikaziKontakte(finalKontakti);
+                }
+            }
+        });
         prikaziKontakte(kontakti);
         };
     private ArrayList<Kontakt> popuniListuTestPodacima() {
@@ -65,5 +91,14 @@ public class MainActivity extends AppCompatActivity {
             int bojaPozadine = (i % 2 == 0) ? Color.BLUE : Color.GRAY;
             ((LinearLayout) findViewById(R.id.scrollViewLayout)).getChildAt(i).setBackgroundColor(bojaPozadine);
         }
+    }
+    private ArrayList<Kontakt> filtriraj(ArrayList<Kontakt> kontakti,String params) {
+        ArrayList<Kontakt> filtrirani = new ArrayList<Kontakt>();
+        for(Kontakt kontakt : kontakti) {
+            if (kontakt.getIme().toLowerCase().contains(params) || kontakt.getPrezime().toLowerCase().contains(params) || kontakt.getTelefon().toLowerCase().contains(params) || kontakt.getSkype().toLowerCase().contains(params)) {
+                filtrirani.add(kontakt);
+            }
+        }
+        return filtrirani;
     }
 }

@@ -8,11 +8,13 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
-    <TextView
+    <EditText
         android:id="@+id/twSearch"
         android:layout_width="match_parent"
-        android:layout_height="34dp"
-        android:text="TextView" />
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Search"
+        android:inputType="text" />
 
     <ScrollView
         android:id="@+id/scrollview"
