@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
         return kontakti;
     }
     private void prikaziKontakte(ArrayList<Kontakt> kontakti) {
+        LinearLayout scrollViewLayout = findViewById(R.id.scrollViewLayout);
+        scrollViewLayout.removeAllViews();
         for(int i = 0; i < kontakti.size(); i++) {
             Kontakt kontakt = kontakti.get(i);
             LayoutInflater inflater = getLayoutInflater();
@@ -44,6 +47,15 @@ public class MainActivity extends AppCompatActivity {
             telefon.setText(kontakt.getTelefon());
             skype.setText(kontakt.getSkype());
             oboj();
+            Button obrisi = (Button) view.findViewById(R.id.btnObrisi);
+            obrisi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    kontakti.remove(kontakt);
+                    System.out.println("obrisan"+kontakti.size());
+                    prikaziKontakte(kontakti);
+                }
+            });
             ((LinearLayout) findViewById(R.id.scrollViewLayout)).addView(view);
         }
     }
