@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 intent.putExtra("podaci",kontaktiString(finalKontakti1));
+                intent.putExtra("isEdit", "no");
                 startActivity(intent);
             }
         });
@@ -100,6 +101,17 @@ public class MainActivity extends AppCompatActivity {
                     prikaziKontakte(kontakti);
                 }
             });
+            int finalI = i;
+            view.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, EditScreenActivity.class);
+                intent.putExtra("ime", kontakt.getIme());
+                intent.putExtra("prezime", kontakt.getPrezime());
+                intent.putExtra("telefon", kontakt.getTelefon());
+                intent.putExtra("skype", kontakt.getSkype());
+                intent.putExtra("isEdit", "yes");
+                intent.putExtra("pozicija", finalI);
+                startActivity(intent);
+            });
             ((LinearLayout) findViewById(R.id.scrollViewLayout)).addView(view);
         }
         oboj();
@@ -141,8 +153,23 @@ public class MainActivity extends AppCompatActivity {
             String [] atributi = podaci[i].split("-");
             kontakti.add(new Kontakt(atributi[0], atributi[3],atributi[2],atributi[1]));
         }
-        if(!(intent.getStringExtra("ime").isEmpty())){
+        String ime = intent.getStringExtra("ime");
+        String prezime = intent.getStringExtra("prezime");
+        String telefon = intent.getStringExtra("telefon");
+        String skype = intent.getStringExtra("skype");
+        String isEdit = intent.getStringExtra("isEdit");
+        System.out.println("isEdit je "+isEdit);
+        int pozicija = intent.getIntExtra("pozicija", -1);
+        if(!(ime.isEmpty()) && !isEdit.equals("yes")){
             kontakti.add(new Kontakt(intent.getStringExtra("ime"),intent.getStringExtra("skype"),intent.getStringExtra("telefon"),intent.getStringExtra("prezime")));
+        }
+        else if (isEdit.equals("yes")) {
+            System.out.println("isEdit radi");
+            kontakti.get(pozicija).setIme(ime);
+            kontakti.get(pozicija).setPrezime(prezime);
+            kontakti.get(pozicija).setTelefon(telefon);
+            kontakti.get(pozicija).setSkype(skype);
+            System.out.println("isEdit radi"+ kontakti.get(pozicija).getIme());
         }
         return kontakti;
     }
