@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
             int finalI = i;
             view.setOnClickListener(v -> {
                 Intent intent = new Intent(MainActivity.this, EditScreenActivity.class);
+                intent.putExtra("podaci",kontaktiString(kontakti));
                 intent.putExtra("ime", kontakt.getIme());
                 intent.putExtra("prezime", kontakt.getPrezime());
                 intent.putExtra("telefon", kontakt.getTelefon());
