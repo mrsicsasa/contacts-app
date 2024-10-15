@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -78,20 +80,16 @@ public class MainActivity extends AppCompatActivity {
         return kontakti;
     }
     private void prikaziKontakte(ArrayList<Kontakt> kontakti) {
-        LinearLayout scrollViewLayout = findViewById(R.id.scrollViewLayout);
-        scrollViewLayout.removeAllViews();
+        //LinearLayout scrollViewLayout = findViewById(R.id.scrollViewLayout);
+        //scrollViewLayout.removeAllViews();
+
         for(int i = 0; i < kontakti.size(); i++) {
             Kontakt kontakt = kontakti.get(i);
             LayoutInflater inflater = getLayoutInflater();
             View view = inflater.inflate(R.layout.jedanred, null);
-            TextView ime = view.findViewById(R.id.twIme);
-            TextView prezime = view.findViewById(R.id.twPrezime);
-            TextView telefon = view.findViewById(R.id.twTelefon);
-            TextView skype = view.findViewById(R.id.twSkype);
-            ime.setText(kontakt.getIme());
-            prezime.setText(kontakt.getPrezime());
-            telefon.setText(kontakt.getTelefon());
-            skype.setText(kontakt.getSkype());
+            RecyclerView recyclerView = findViewById(R.id.recyclerView);
+            recyclerView.setLayoutManager( new LinearLayoutManager(this));
+            recyclerView.setAdapter(new KontaktAdapter(kontakti));
             Button obrisi = (Button) view.findViewById(R.id.btnObrisi);
             obrisi.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -113,16 +111,16 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("pozicija", finalI);
                 startActivity(intent);
             });
-            ((LinearLayout) findViewById(R.id.scrollViewLayout)).addView(view);
+         //   ((LinearLayout) findViewById(R.id.scrollViewLayout)).addView(view);
         }
         oboj();
     }
     private void oboj() {
-        int broj = ((LinearLayout)findViewById(R.id.scrollViewLayout)).getChildCount();
-        for(int i = 0; i < broj; i++) {
-            int bojaPozadine = (i % 2 == 0) ? Color.BLUE : Color.GRAY;
-            ((LinearLayout) findViewById(R.id.scrollViewLayout)).getChildAt(i).setBackgroundColor(bojaPozadine);
-        }
+      //  int broj = ((LinearLayout)findViewById(R.id.scrollViewLayout)).getChildCount();
+      //  for(int i = 0; i < broj; i++) {
+       //     int bojaPozadine = (i % 2 == 0) ? Color.BLUE : Color.GRAY;
+         //   ((LinearLayout) findViewById(R.id.scrollViewLayout)).getChildAt(i).setBackgroundColor(bojaPozadine);
+      //  }
     }
     private ArrayList<Kontakt> filtriraj(ArrayList<Kontakt> kontakti,String params) {
         ArrayList<Kontakt> filtrirani = new ArrayList<Kontakt>();

@@ -16,17 +16,10 @@
         android:hint="Search"
         android:inputType="text" />
 
-    <ScrollView
-        android:id="@+id/scrollview"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="655dp">
-
-        <LinearLayout
-            android:id="@+id/scrollViewLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
+        android:layout_height="match_parent" />
 
     <Button
         android:id="@+id/buttonDodaj"
